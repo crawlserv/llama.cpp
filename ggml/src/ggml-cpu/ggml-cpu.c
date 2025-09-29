@@ -2430,6 +2430,11 @@ static bool ggml_thread_apply_priority(int32_t prio) {
         // all our threads onto the first 4 cores which results in terrible performance with
         // n_threads > 4
         #if _WIN32_WINNT >= 0x0602
+        #ifndef _MSC_VER
+        typedef PROCESS_POWER_THROTTLING_STATE THREAD_POWER_THROTTLING_STATE;
+        #define THREAD_POWER_THROTTLING_CURRENT_VERSION PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+        #define THREAD_POWER_THROTTLING_EXECUTION_SPEED PROCESS_POWER_THROTTLING_EXECUTION_SPEED
+        #endif
         THREAD_POWER_THROTTLING_STATE t;
         ZeroMemory(&t, sizeof(t));
         t.Version     = THREAD_POWER_THROTTLING_CURRENT_VERSION;
